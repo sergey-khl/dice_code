@@ -4,6 +4,8 @@ const dieIcon1 = document.querySelector(".d1");
 const dieIcon2 = document.querySelector(".d2");
 const dieRoll = document.querySelector(".die-roll");
 const result = document.querySelector(".result");
+const timer = document.querySelector(".timer");
+const asound = document.querySelector(".s");
 
 const dieDict = {
     1 : "assets/dice1.svg",
@@ -32,7 +34,8 @@ function countdown(seconds, dis) {
 }
 
 //roll on click
-dieRoll.addEventListener("mousedown", (e) => {
+dieRoll.addEventListener("click", (e) => {
+    dieRoll.style.display = "none";
     var num1;
     var num2;
     playAudio("assets/dicesound.wav");
@@ -52,7 +55,29 @@ dieRoll.addEventListener("mousedown", (e) => {
     }
 
     setTimeout(function() {
-        result.innerHTML = `You rolled:  ${num1 + num2}`;
-    }, 3000);
-    dieRoll.style.display = "none";
+        total = num1 + num2;
+        result.innerHTML = `You rolled:  ${total}`;
+        startTimer(total * 600, timer);
+    }, 3000)
 })
+
+//timer
+function startTimer(duration, display) {
+    var timer = duration, minutes, seconds;
+    var loop = setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+
+        if (--timer < 0) {
+            display.textContent = "TIME IS UP!"
+
+            clearInterval(loop);
+
+        }
+    }, 1000);
+}
